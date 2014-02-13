@@ -74,29 +74,29 @@ class InventoryUnitSpec extends ObjectBehavior
         $this->getShippingState()->shouldReturn(ShipmentInterface::STATE_SHIPPED);
     }
 
-    function it_does_not_belong_to_an_order_by_default()
+    function it_does_not_belong_to_an_order_item_by_default()
     {
-        $this->getOrder()->shouldReturn(null);
+        $this->getOrderItem()->shouldReturn(null);
     }
 
     /**
-     * @param Sylius\Bundle\CoreBundle\Model\OrderInterface $order
+     * @param Sylius\Bundle\CoreBundle\Model\OrderItemInterface $order_item
      */
-    function it_allows_attaching_itself_to_an_order($order)
+    function it_allows_attaching_itself_to_an_order_item($order_item)
     {
-        $this->setOrder($order);
-        $this->getOrder()->shouldReturn($order);
+        $this->setOrderItem($order_item);
+        $this->getOrderItem()->shouldReturn($order_item);
     }
 
     /**
-     * @param Sylius\Bundle\CoreBundle\Model\OrderInterface $order
+     * @param Sylius\Bundle\CoreBundle\Model\OrderItemInterface $order_item
      */
-    function it_allows_detaching_itself_from_an_order($order)
+    function it_allows_detaching_itself_from_an_order_item($order_item)
     {
-        $this->setOrder($order);
-        $this->getOrder()->shouldReturn($order);
+        $this->setOrderItem($order_item);
+        $this->getOrderItem()->shouldReturn($order_item);
 
-        $this->setOrder(null);
-        $this->getOrder()->shouldReturn(null);
+        $this->setOrderItem(null);
+        $this->getOrderItem()->shouldReturn(null);
     }
 }

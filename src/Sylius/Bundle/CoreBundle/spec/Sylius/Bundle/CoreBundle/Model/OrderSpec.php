@@ -14,7 +14,8 @@ namespace spec\Sylius\Bundle\CoreBundle\Model;
 use PhpSpec\ObjectBehavior;
 use Sylius\Bundle\CoreBundle\Model\OrderInterface;
 use Sylius\Bundle\CoreBundle\Model\OrderShippingStates;
-use Sylius\Bundle\InventoryBundle\Model\InventoryUnitInterface;
+use Sylius\Bundle\CoreBundle\Model\InventoryUnitInterface;
+use Sylius\Bundle\CoreBundle\Model\OrderItemInterface;
 
 /**
  * @author Paweł Jędrzejewski <pjedrzejewski@diweb.pl>
@@ -81,31 +82,6 @@ class OrderSpec extends ObjectBehavior
     function it_should_initialize_inventory_units_collection_by_default()
     {
         $this->getInventoryUnits()->shouldHaveType('Doctrine\Common\Collections\Collection');
-    }
-
-    /**
-     * @param Sylius\Bundle\CoreBundle\Model\InventoryUnitInterface $unit
-     */
-    function it_should_add_inventory_units_properly($unit)
-    {
-        $unit->setOrder($this)->shouldBeCalled();
-        $this->addInventoryUnit($unit);
-    }
-
-    /**
-     * @param Sylius\Bundle\CoreBundle\Model\InventoryUnitInterface $unit
-     */
-    function it_should_remove_inventory_units_properly($unit)
-    {
-        $unit->setOrder($this)->shouldBeCalled();
-        $this->addInventoryUnit($unit);
-
-        $this->hasInventoryUnit($unit)->shouldReturn(true);
-
-        $unit->setOrder(null)->shouldBeCalled();
-        $this->removeInventoryUnit($unit);
-
-        $this->hasInventoryUnit($unit)->shouldReturn(false);
     }
 
     function it_should_initialize_shipments_collection_by_default()
@@ -246,38 +222,28 @@ class OrderSpec extends ObjectBehavior
         $this->getShippingState()->shouldReturn(OrderShippingStates::SHIPPED);
     }
 
-    /**
-     * @param Sylius\Bundle\CoreBundle\Model\InventoryUnitInterface $unit1
-     * @param Sylius\Bundle\CoreBundle\Model\InventoryUnitInterface $unit2
-     */
-    function it_is_a_backorder_if_contains_at_least_one_backordered_unit($unit1, $unit2)
+    function it_is_a_backorder_if_contains_at_least_one_backordered_unit(InventoryUnitInterface $unit1, InventoryUnitInterface $unit2, OrderItemInterface $item)
     {
-        $unit1->setOrder($this)->shouldBeCalled();
-        $unit2->setOrder($this)->shouldBeCalled();
-
-        $this->addInventoryUnit($unit1);
-        $this->addInventoryUnit($unit2);
-
         $unit1->getInventoryState()->willReturn(InventoryUnitInterface::STATE_BACKORDERED);
         $unit2->getInventoryState()->willReturn(InventoryUnitInterface::STATE_SOLD);
+
+        $item->getInventoryUnits()->willReturn(array($unit1, $unit2));
+
+        $item->setOrder($this)->shouldBeCalled();
+        $this->addItem($item);
 
         $this->shouldBeBackorder();
     }
 
-    /**
-     * @param Sylius\Bundle\CoreBundle\Model\InventoryUnitInterface $unit1
-     * @param Sylius\Bundle\CoreBundle\Model\InventoryUnitInterface $unit2
-     */
-    function it_not_a_backorder_if_contains_no_backordered_units($unit1, $unit2)
+    function it_not_a_backorder_if_contains_no_backordered_units(InventoryUnitInterface $unit1, InventoryUnitInterface $unit2, OrderItemInterface $item)
     {
-        $unit1->setOrder($this)->shouldBeCalled();
-        $unit2->setOrder($this)->shouldBeCalled();
-
-        $this->addInventoryUnit($unit1);
-        $this->addInventoryUnit($unit2);
-
         $unit1->getInventoryState()->willReturn(InventoryUnitInterface::STATE_SOLD);
         $unit2->getInventoryState()->willReturn(InventoryUnitInterface::STATE_SOLD);
+
+        $item->getInventoryUnits()->willReturn(array($unit1, $unit2));
+
+        $item->setOrder($this)->shouldBeCalled();
+        $this->addItem($item);
 
         $this->shouldNotBeBackorder();
     }
