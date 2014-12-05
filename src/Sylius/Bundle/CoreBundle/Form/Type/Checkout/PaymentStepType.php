@@ -29,6 +29,7 @@ class PaymentStepType extends AbstractResourceType
     {
         $notBlank = new NotBlank();
         $notBlank->message = 'sylius.checkout.payment_method.not_blank';
+        $notBlank->groups = $this->validationGroups;
 
         $builder
             ->add('paymentMethod', 'sylius_payment_method_choice', array(
