@@ -46,6 +46,7 @@ sylius_cart:
     classes:
         item:
             form: Sylius\Bundle\CoreBundle\Form\Type\CartItemType
+            controller: Sylius\Bundle\CoreBundle\Controller\CartItemController
         cart:
             form: Sylius\Bundle\CoreBundle\Form\Type\CartType
 

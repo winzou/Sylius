@@ -30,4 +30,8 @@ final class SyliusCartEvents
     const ITEM_REMOVE_INITIALIZE = 'sylius.cart_item.remove.initialize';
     const ITEM_REMOVE_COMPLETED  = 'sylius.cart_item.remove.completed';
     const ITEM_REMOVE_ERROR      = 'sylius.cart_item.remove.error';
+
+    const ITEM_EDIT_INITIALIZE = 'sylius.cart_item.edit.initialize';
+    const ITEM_EDIT_COMPLETED  = 'sylius.cart_item.edit.completed';
+    const ITEM_EDIT_ERROR      = 'sylius.cart_item.edit.error';
 }
